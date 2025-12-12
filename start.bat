@@ -72,8 +72,8 @@ echo.
 echo -------------------------------------------------------
 echo.
 
-:: Use npm run dev:open to handle browser opening reliably
-call %NPM_CMD% run dev:open
+:: Run vite directly from node_modules using node to ensure it works
+node node_modules\vite\bin\vite.js --host --open
 
 echo.
 echo -------------------------------------------------------

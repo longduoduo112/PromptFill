@@ -1,3 +1,13 @@
+/**
+ * @typedef {Object} TemplateConfig
+ * @property {string} id - 唯一标识符，建议使用 'tpl_' 前缀
+ * @property {string} name - 模板显示名称
+ * @property {string} content - 模板内容，支持 markdown 和 {{variable}} 变量
+ * @property {string} imageUrl - 预览缩略图 URL
+ * @property {Object.<string, string>} selections - 默认选中的变量值 map (key: variable_id, value: option_value)
+ * @property {string[]} tags - 模板标签数组，可选值：建筑、人物、摄影、产品、实拍、图表、卡通、宠物、游戏、创意
+ */
+
 export const DEFAULT_TEMPLATE_CONTENT = `### Role (角色设定)
 你是一位顶尖的 {{role}}，擅长制作详尽的角色设定图（Character Sheet）。你具备“像素级拆解”的能力，能够透视角色的穿着层级、捕捉微表情变化，并将与其相关的物品进行具象化还原。你特别擅长通过 {{subject}} 的私密物品、随身物件和生活细节来侧面丰满人物性格与背景故事。
 
@@ -76,13 +86,76 @@ export const TEMPLATE_CHARACTER_SELFIE = `### Character Selfie (人物趣味合�
 
 **要求:** 保持自拍构图不变，让两个角色自然地融入画面，光影统一，互动自然。`;
 
+export const TEMPLATE_CLASSIC_SCENE = `### 经典场景微缩复刻
+
+展示一个精致的、微缩 3D 卡通风格的{{classic_scene}}场景，采用清晰的 45° 俯视等轴侧视角（Isometric view）。
+
+**核心构图：** 将主体最经典的形象突出地置于中心。自动搭配比例适宜的关键元素图标、象征性物品、迷人的小角色以及能诠释主体故事的道具。整体布局应当充满趣味且紧凑聚集，宛如一套高端的玩具盲盒套装。
+
+**渲染与材质：** 采用{{render_style}}风格进行渲染。建模必须精细、圆润流畅且质感丰富。使用逼真的 PBR 材质：混合用于有机形态的柔和哑光粘土、用于水体/玻璃元素的光泽树脂，以及用于结构组件的光滑 PVC 材质。着重表现具有触感、“看起来手感很好”的纹理细节。
+
+**灯光与氛围：** 采用柔和、逼真的摄影棚布光配合全局光照（Global Illumination）。利用柔和的阴影营造出温暖、舒适且充满魔力的氛围。
+
+**布局：** 保持干净、极简的布局，使用与主体配色相协调的纯色背景。
+
+**文字：** 在{{position}}，使用巨大的、圆润的 3D 字体醒目地展示主体名称，使其轻微悬浮于场景上方。`;
+
+export const TEMPLATE_CORPORATE_GROWTH = `### 可视化企业成长之路
+
+**角色定义**  
+你是一位企业演变建筑师 (Corporate Evolution Architect)。你的目标是创建一个超高密度、垂直堆叠的等距轴测（Isometric）3D 渲染可视化图像，展示 {{company}} 公司的技术和产品历史。通过图像展示一个企业的时间线：底部是简陋的创业故事，通过产品迭代垂直向上升起，直到现代或未来的巅峰。
+
+**核心能力 | 关键视觉策略（rameless Tech-Lapse）：**
+- **根除容器：** 严禁使用底板、边框或横截面视图。底部边缘是创业基地（车库/实验室/小办公室），无限延伸。
+- **垂直时间线：** “之字形上升（Zig-Zag Ascent）”穿越创新历程。  
+  - 底部（前景）：创业阶段岁月 + 第一个原型机  
+  - 中部（上升中）：快速增长 / 全球扩张 / 标志性的中期产品  
+  - 顶部（背景）：当前总部 / 生态系统 / 未来研发
+- **集成 3D 标题：** 企业 Logo 必须渲染为巨大的、电影般的 3D 字体，矗立在前景，使用公司标志性字体/材质。
+
+**检索与梳理：**
+- 提取企业历史的几个阶段。
+- 列出定义每个时代的“经典产品”。
+- 劳动力演变：可视化员工与设备的变化。
+
+**构图与光影：**  
+无框架、无边界、无横截面。垂直之字形时间线，将产品代际从底部的创业阶段堆叠到未来的顶部。灯光从近现代的暖光（创业初期）过渡到干净的白/蓝 LED 光（现代科技）。环境与公司经典产品随高度演变。公司的多款经典产品以“巨物化”呈现。  
+移轴摄影（Tilt-shift）与 {{render_style}}，画幅 {{ratio}}。`;
+
+/**
+ * 可用的模板标签
+ */
+export const TEMPLATE_TAGS = [
+  "建筑",
+  "人物",
+  "摄影",
+  "产品",
+  "实拍",
+  "图表",
+  "卡通",
+  "宠物",
+  "游戏",
+  "创意"
+];
+
+/**
+ * 系统内置模板列表
+ * 
+ * 如何添加新模板：
+ * 1. 在上方定义模板内容常量 (可选，但推荐)
+ * 2. 在数组中添加一个新的配置对象
+ * 3. 确保 id 唯一
+ * 4. imageUrl 可以是外部链接，也可以是项目内的 import 资源
+ * 5. tags 可以从 TEMPLATE_TAGS 中选择
+ */
 export const INITIAL_TEMPLATES_CONFIG = [
   {
     id: "tpl_default",
     name: "角色概念分解图",
     content: DEFAULT_TEMPLATE_CONTENT,
     imageUrl: "https://s3.bmp.ovh/imgs/2025/12/08/ec433cf214faf102.jpg",
-    selections: {}
+    selections: {},
+    tags: ["人物", "创意", "图表"]
   },
   {
     id: "tpl_photo_grid",
@@ -109,20 +182,47 @@ export const INITIAL_TEMPLATES_CONFIG = [
       "lens_param-6": "85mm, f/1.9",
       "lens_param-7": "50mm, f/1.8",
       "lens_param-8": "85mm, f/2.2"
-    }
+    },
+    tags: ["人物", "摄影", "实拍"]
   },
   {
     id: "tpl_fashion",
     name: "时尚情绪板插画",
     content: TEMPLATE_FASHION_MOODBOARD,
     imageUrl: "https://s3.bmp.ovh/imgs/2025/12/08/4d9f92ccb4113fdd.jpg",
-    selections: {}
+    selections: {},
+    tags: ["人物", "创意", "卡通"]
   },
   {
     id: "tpl_character_selfie",
     name: "人物趣味合影",
     content: TEMPLATE_CHARACTER_SELFIE,
     imageUrl: "https://s3.bmp.ovh/imgs/2025/12/08/c2312d24d0f2c38e.jpeg",
-    selections: {}
+    selections: {},
+    tags: ["人物", "创意"]
+  },
+  {
+    id: "tpl_classic_scene",
+    name: "经典场景微缩复刻",
+    content: TEMPLATE_CLASSIC_SCENE,
+    imageUrl: "https://s3.bmp.ovh/imgs/2025/12/10/1eac697f5a438542.jpg",
+    selections: {
+      "classic_scene": "千与千寻",
+      "render_style": "Octane Render 和 Cinema 4D",
+      "position": "顶部中央"
+    },
+    tags: ["卡通", "创意", "游戏"]
+  },
+  {
+    id: "tpl_corporate_growth",
+    name: "可视化企业成长之路",
+    content: TEMPLATE_CORPORATE_GROWTH,
+    imageUrl: "https://s3.bmp.ovh/imgs/2025/12/10/a7e87e49c6144fdc.jpg",
+    selections: {
+      "company": "任天堂（Nintendo）",
+      "render_style": "3D像素风格",
+      "ratio": "3:4竖构图"
+    },
+    tags: ["建筑", "创意", "图表"]
   }
 ];
